@@ -20,7 +20,8 @@ jobs:
           sudo apt install -y \
             git cmake libtool libboost-all-dev libjsoncpp-dev \
             libcurl4-openssl-dev libmicrohttpd-dev \
-            libcryptopp-dev build-essential
+            libcrypto++-dev build-essential
+
 
       - name: Build libjson-rpc-cpp from source
         run: |
