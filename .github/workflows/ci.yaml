@@ -1,0 +1,40 @@
+name: Build Project
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            git cmake libtool libboost-all-dev libjsoncpp-dev \
+            libcurl4-openssl-dev libmicrohttpd-dev \
+            libcryptopp-dev build-essential
+
+      - name: Build libjson-rpc-cpp from source
+        run: |
+          git clone https://github.com/cinemast/libjson-rpc-cpp.git
+          cd libjson-rpc-cpp
+          mkdir build && cd build
+          cmake ..
+          make -j$(nproc)
+          sudo make install
+          sudo ldconfig
+
+      - name: Build your project
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          make -j$(nproc)
